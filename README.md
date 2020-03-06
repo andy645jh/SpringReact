@@ -1,2 +1,1 @@
-# SpringReact
-Aplicacion basica que usa una api rest de spring y react 
+# BASIC CRUD USING SPRING-BOOT AND REACT
