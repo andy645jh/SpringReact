@@ -22,7 +22,8 @@ class Register extends Component
     {
         const data = { 
             firstname: this.state.firstname,
-            lastname: this.state.lastname};
+            lastname: this.state.lastname
+        };
         
         try {
             this.setState({ isLoading: true });

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Persona from './Persona';
 
 class People extends Component
 {
@@ -19,7 +20,7 @@ class People extends Component
                     <div className="col">
                     {
                         (people!=null) &&
-                        people.map((person) => <h3 key={person.id} id={person.id}>{person.firstname} {person.lastname}</h3>)                  
+                        people.map((person) => <Persona update={() => this.props.update()} key={person.id} id={person.id} firstname={person.firstname} lastname={person.lastname}/>)                  
                     }
                     </div>
                 </div>
