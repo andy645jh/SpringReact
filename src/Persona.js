@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-
-const style = {
-    display: 'inline',
-    margin: '10px',
-};
-
-const styleBox = {
-    border: '1px solid 0x555',
-    padding: '15px',
-};
+import { connect } from 'react-redux';
 
 class Persona extends Component {
-   
+
     onClick(e, id) {
         console.log("Id: ", id);
         //this.deletePersona();
@@ -20,10 +10,10 @@ class Persona extends Component {
     }
 
     onClickEditar(e, id) {
-        console.log("Id: ", id);            
+        console.log("Id: ", id);
 
         this.props.setEditMode({
-            isEditMode:true
+            isEditMode: true
         });
 
         this.props.setPerson({
@@ -33,40 +23,45 @@ class Persona extends Component {
         });
 
         this.props.edit();
-    }   
+    }
 
     render() {
         return (
-            <div style={styleBox}>
-                <h3 style={style} id={this.props.id}>{this.props.id} --> {this.props.firstname} {this.props.lastname}</h3>                
-                <button type="button" onClick={(e) => this.onClick(e, this.props.id)}>X</button>
-                <button type="button" onClick={(e) => this.onClickEditar(e, this.props.id)}>E</button>
+            <div className='row border-bottom bg-light px-2 py-2'>
+                
+                <div className='col'>
+                    <h5 id={this.props.id}>{this.props.id} --> {this.props.firstname} {this.props.lastname}</h5>
+                </div>
+
+                <div className='col-auto justify-content-end'>
+                    <button className='btn btn-primary mx-2' type="button" onClick={(e) => this.onClickEditar(e, this.props.id)}>E</button>
+                    <button className='btn btn-danger' type="button" onClick={(e) => this.onClick(e, this.props.id)}>X</button>
+                </div>
             </div>
         );
     }
 }
 
 const mapStateToProps = state =>
-({
-    person:state.person
-});
+    ({
+        person: state.person
+    });
 
 const mapDispatchToProps = dispatch =>
-({
-    setPerson(person)
-    {
-        dispatch({
-            type: 'SET_PERSON',
-            person
-        })        
-    },
+    ({
+        setPerson(person) {
+            dispatch({
+                type: 'SET_PERSON',
+                person
+            })
+        },
 
-    setEditMode(isEditMode){
-        dispatch({
-            type:'SET_EDIT_MODE',
-            isEditMode
-        })
-    }
-});
+        setEditMode(isEditMode) {
+            dispatch({
+                type: 'SET_EDIT_MODE',
+                isEditMode
+            })
+        }
+    });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Persona);

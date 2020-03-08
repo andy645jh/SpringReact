@@ -4,31 +4,28 @@ import store from './store';
 
 class EditRegister extends Component {
     constructor(props) {
-        super(props);        
+        super(props);
 
-        this.unsubscribe = store.subscribe(() => {   
-            console.log("Subscribe: ",store.getState());
-            
+        this.unsubscribe = store.subscribe(() => {
+            console.log("Subscribe: ", store.getState());
+
             const isEditMode = store.getState().isEditMode;
-            if(isEditMode)
-            {
+            if (isEditMode) {
                 const person = store.getState().person;
-            
+
                 this.refs.firstname.value = person.firstname;
                 this.refs.lastname.value = person.lastname;
-                
-                this.setState({person : store.getState().person}); 
-            }                  
+
+                this.setState({ person: store.getState().person });
+            }
         });
     }
-    componentDidMount()
-    {
+    componentDidMount() {
         this.refs.firstname.value = this.props.person.firstname;
         this.refs.lastname.value = this.props.person.lastname;
     }
 
-    componentWillUnmount()
-    {
+    componentWillUnmount() {
         this.unsubscribe();
     }
 
@@ -52,21 +49,27 @@ class EditRegister extends Component {
         //const { person } = this.state;
 
         return (
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <form >
-                            <div className="form-group">
-                                <label htmlFor="firstname">First Name</label>
-                                <input className="form-control" ref="firstname" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="lastname">Last Name</label>
-                                <input className="form-control" ref="lastname" />
-                            </div>
 
-                            <button onClick={(e) => this.onClickUpdate(e)} type="button">Save</button>
-                        </form>
+            <div className="container p-3 border m-3">
+                <div className="col">
+                    <div className='row d-flex align-content-center justify-content-center my-2'>
+                        <h2 >EDITAR</h2>
+                    </div>
+                    <div className="row">
+                        <div className='col'>
+                            <form >
+                                <div className="form-group">
+                                    <label htmlFor="firstname">First Name</label>
+                                    <input className="form-control" ref="firstname" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="lastname">Last Name</label>
+                                    <input className="form-control" ref="lastname" />
+                                </div>
+
+                                <button onClick={(e) => this.onClickUpdate(e)} type="button">Save</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

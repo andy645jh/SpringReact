@@ -88,7 +88,7 @@ class App extends Component {
 
     return (
       <Provider store={store}>
-      <div className="App">
+      <div className="App container">
         {
           (isEditMode) ? <EditRegister person={person} update={(p)=> this.updatePerson(p)} /> :
           <Register create={(p) => this.createPerson(p)} person={person} /> 
