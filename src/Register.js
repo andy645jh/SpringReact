@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component  } from 'react';
+import { connect } from 'react-redux';
+import store from './store';
 
 class Register extends Component
 {
@@ -6,46 +8,39 @@ class Register extends Component
     {
         super(props);   
         this.state = {
-            firstname:'',
-            lastname:''
-        };  
+            person:{
+                id: this.props.id,
+                firstname: this.props.firstname,
+                lastname: this.props.lastname
+            }
+        }; 
+
+        /*const unsubscribe = store.subscribe(() => {   
+            console.log("Subscribe: ",store.getState());
+            
+            const id = store.getState().person.id;
+            if(id>=0)
+            {
+                this.setState({person : store.getState().person}); 
+            }                  
+        });*/
     }
 
-    onClick(e)
+    onClickAdd(e)
     {
         e.preventDefault();
-        console.log("Subir"); 
-        this.addPerson();       
-    }
-
-    async addPerson()
-    {
-        const data = { 
-            firstname: this.state.firstname,
-            lastname: this.state.lastname
-        };
         
-        try {
-            this.setState({ isLoading: true });
-            const response = await fetch('http://localhost:8080/personas/create',{
-                body: JSON.stringify(data),
-                method: 'PUT',
-                headers:{
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const responseJson = await response;  
-            if(response.ok)
-            {
-                this.props.update();
-            }
-            console.log("Response: ",responseJson.ok);              
-            this.setState({ firstname:'', lastname:'', isLoading: false });
-        } catch (err) {
-            this.setState({ isLoading: false });
-            console.error(err);
+        const person = {
+            firstname: this.refs.firstname.value,
+            lastname: this.refs.lastname.value
         }
+        console.log("Subir"); 
+       
+        this.props.create(person);
+        this.props.setDefault();   
+
+        this.refs.firstname.value = '';
+        this.refs.lastname.value = '';
     }
 
     onChange(e)
@@ -53,8 +48,7 @@ class Register extends Component
         this.setState({[e.target.name]:e.target.value});
     }
 
-    render() {
-
+    render() {        
         return (
             <div className="container">
                 <div className="row">
@@ -62,14 +56,14 @@ class Register extends Component
                         <form >
                             <div className="form-group">
                                 <label htmlFor="firstname">First Name</label>
-                                <input className="form-control" onChange={(e)=>this.onChange(e)} value={this.state.firstname} name="firstname" />
+                                <input className="form-control" ref="firstname" />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastname">Last Name</label>
-                                <input className="form-control" onChange={(e)=>this.onChange(e)} value={this.state.lastname} name="lastname" />
+                                <input className="form-control" ref="lastname" />
                             </div>
 
-                            <button onClick={(e)=>this.onClick(e)} type="button">Add</button>
+                            <button onClick={(e)=>this.onClickAdd(e)} type="button">Add</button>
                         </form>
                     </div>
                 </div>
@@ -78,4 +72,34 @@ class Register extends Component
     }
 }
 
-export default Register;
+const mapStateToProps = state =>
+({
+    person:state.person
+});
+
+const mapDispatchToProps = dispatch =>
+({
+    setPerson(person)
+    {
+        dispatch({
+            type: 'SET_PERSON',
+            person
+        })        
+    },
+
+    setEditMode(isEditMode){
+        dispatch({
+            type:'SET_EDIT_MODE',
+            isEditMode
+        })
+    },
+
+    setDefault(isEditMode){
+        dispatch({
+            type:'DEF',
+            isEditMode            
+        })
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

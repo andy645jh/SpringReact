@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
 const style = {
     display: 'inline',
@@ -11,54 +12,61 @@ const styleBox = {
 };
 
 class Persona extends Component {
-    constructor({ id, firstname, lastname }) {
-        super();
-        this.state = {
-            id: id,
-            firstname: firstname,
-            lastname: lastname
-        }
-    }
-
+   
     onClick(e, id) {
         console.log("Id: ", id);
-        this.deletePersona();
+        //this.deletePersona();
+        this.props.delete(id);
     }
 
     onClickEditar(e, id) {
-        console.log("Id: ", id);
-        this.deletePersona();
-    }
+        console.log("Id: ", id);            
 
-    async deletePersona() {
+        this.props.setEditMode({
+            isEditMode:true
+        });
 
-        try {
-            this.setState({ isLoading: true });
-            const response = await fetch('http://localhost:8080/personas/'+this.state.id, {                
-                method: 'DELETE'                
-            });
+        this.props.setPerson({
+            id: this.props.id,
+            firstname: this.props.firstname,
+            lastname: this.props.lastname
+        });
 
-            const responseJson = await response;  
-            if(responseJson.ok)
-            {
-                this.props.update();
-            }
-        } catch (err) {
-            this.setState({ isLoading: false });
-            console.error(err);
-        }
-
-    }
+        this.props.edit();
+    }   
 
     render() {
         return (
             <div style={styleBox}>
-                <h3 style={style} key={this.state.id} id={this.state.id}>{this.state.firstname} {this.state.lastname}</h3>                
-                <button type="button" onClick={(e) => this.onClick(e, this.state.id)}>X</button>
-                <button type="button" onClick={(e) => this.onClickEditar(e, this.state.id)}>E</button>
+                <h3 style={style} id={this.props.id}>{this.props.id} --> {this.props.firstname} {this.props.lastname}</h3>                
+                <button type="button" onClick={(e) => this.onClick(e, this.props.id)}>X</button>
+                <button type="button" onClick={(e) => this.onClickEditar(e, this.props.id)}>E</button>
             </div>
         );
     }
 }
 
-export default Persona;
+const mapStateToProps = state =>
+({
+    person:state.person
+});
+
+const mapDispatchToProps = dispatch =>
+({
+    setPerson(person)
+    {
+        dispatch({
+            type: 'SET_PERSON',
+            person
+        })        
+    },
+
+    setEditMode(isEditMode){
+        dispatch({
+            type:'SET_EDIT_MODE',
+            isEditMode
+        })
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Persona);

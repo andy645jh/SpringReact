@@ -2,25 +2,35 @@ import React, { Component } from 'react';
 import Persona from './Persona';
 
 class People extends Component
-{
-    constructor(props)
+{   
+    getPerson(person)
     {
-        super(props);   
-        this.state = {                  
-            people: this.props.people     
-        };  
+        const p = {
+            person: {
+                id: person.id,
+                firstname: person.firstname,
+                lastname: person.lastname,
+        }};
+        return p;
     }
 
     render() {
-        const {people} = this.state;
-
+        const people = this.props.people;
+        console.log("People.render ",people);
         return (
             <div className="container">
                 <div className="row">
                     <div className="col">
                     {
                         (people!=null) &&
-                        people.map((person) => <Persona update={() => this.props.update()} key={person.id} id={person.id} firstname={person.firstname} lastname={person.lastname}/>)                  
+                        people.map((person) => 
+                        <Persona 
+                            edit={this.props.edit} 
+                            delete={this.props.delete} 
+                            key={person.id}                             
+                            id={person.id}
+                            firstname={person.firstname}
+                            lastname={person.lastname}/>)                  
                     }
                     </div>
                 </div>

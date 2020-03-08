@@ -57,8 +57,8 @@ class PersonService
             .then(response => {
                 if (!response.ok) {
                     this.handleResponseError(response);
-                }
-                return response.json();
+                }                
+                return response.ok;
             })
             .catch(error => {
                 this.handleError(error);
@@ -74,26 +74,27 @@ class PersonService
                 if (!response.ok) {
                     this.handleResponseError(response);
                 }
+                return true;
             })
             .catch(error => {
                 this.handleError(error);
             });
     }
 
-    async updatePerson(item) 
+    async updatePerson(person) 
     {        
-        return fetch(item.link, {
+        return fetch(this.config.ITEM_COLLECTION_URL+person.id, {
             method: "PUT",            
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(item)
+            body: JSON.stringify(person)
         })
             .then(response => {
                 if (!response.ok) {
                     this.handleResponseError(response);
                 }
-                return response.json();
+                return response.ok;
             })
             .catch(error => {
                 this.handleError(error);
